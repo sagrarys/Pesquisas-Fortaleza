@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intenção de Voto - Fortaleza (14/10 a 20/10)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        .chart-container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        .average-chart-container {
+            width: 60%;
+            margin: auto;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <h2>Intenção de Voto para Prefeito de Fortaleza</h2>
+        <h4>Votos válidos (14/10 a 20/10)</h4>
+        <canvas id="votingChart"></canvas>
+    </div>
+
+    <div class="average-chart-container">
+        <h3>Média das Pesquisas</h3>
+        <canvas id="averageChart"></canvas>
+    </div>
+
+    <script>
+        const dataAndre = [51.14, 50, 51, 51.74];
+        const dataEvandro = [48.86, 50, 49, 48.26];
+        const labels = ['Datafolha', 'Quaest', 'Atlas Intel', 'Paraná Pesquisas'];
+
+        // Cálculo das médias
+        const mediaAndre = (dataAndre.reduce((a, b) => a + b, 0) / dataAndre.length).toFixed(2);
+        const mediaEvandro = (dataEvandro.reduce((a, b) => a + b, 0) / dataEvandro.length).toFixed(2);
+
+        // Gráfico principal com os valores das pesquisas
+        const ctx1 = document.getElementById('votingChart').getContext('2d');
+        const votingChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'André Fernandes',
+                        data: dataAndre,
+                        backgroundColor: 'darkblue',
+                        borderColor: 'darkblue',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Evandro Leitão',
+                        data: dataEvandro,
+                        backgroundColor: 'red',
+                        borderColor: 'red',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    tooltip: {
+                        enabled: false // Desativar tooltip para deixar apenas os números fixos visíveis
+                    },
+                    // Exibir os números nas barras como texto
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value) => value + '%',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        color: 'black'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Porcentagem (%)'
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // Ativação do plugin para exibir os valores
+        });
+
+        // Gráfico separado para a média das pesquisas
+        const ctx2 = document.getElementById('averageChart').getContext('2d');
+        const averageChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Média André Fernandes', 'Média Evandro Leitão'],
+                datasets: [
+                    {
+                        label: 'Média das Pesquisas',
+                        data: [mediaAndre, mediaEvandro],
+                        backgroundColor: ['darkblue', 'red'],
+                        borderColor: ['darkblue', 'red'],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    // Exibir os números nas barras como texto
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value) => value + '%',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        color: 'black'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Porcentagem (%)'
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels] // Ativação do plugin para exibir os valores
+        });
+    </script>
+</body>
+</html>
