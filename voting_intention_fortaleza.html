@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intenção de Voto - Fortaleza (14/10 a 20/10)</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <style>
+        .chart-container {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        .average-chart-container {
+            width: 60%;
+            margin: auto;
+            margin-top: 40px;
+        }
+        .analysis-container {
+            width: 80%;
+            margin: auto;
+            margin-top: 30px;
+            font-size: 18px;
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+    <div class="chart-container">
+        <h2>Intenção de Voto para Prefeito de Fortaleza</h2>
+        <h4>Votos válidos (14/10 a 20/10)</h4>
+        <canvas id="votingChart"></canvas>
+    </div>
+
+    <div class="average-chart-container">
+        <h3>Média das Pesquisas</h3>
+        <canvas id="averageChart"></canvas>
+    </div>
+
+    <div class="analysis-container">
+        <h3>Análise dos Dados</h3>
+        <p>
+            Os resultados das pesquisas desta semana indicam uma disputa bastante acirrada entre André Fernandes e Evandro Leitão pela prefeitura de Fortaleza. O levantamento do Datafolha coloca André ligeiramente à frente, com 51,14% dos votos válidos contra 48,86% de Evandro. Esse cenário é semelhante no levantamento do Atlas Intel e do Paraná Pesquisas, onde André também aparece liderando com margens pequenas.
+        </p>
+        <p>
+            No entanto, a pesquisa da Quaest apresenta um empate exato, com ambos os candidatos marcando 50%. Isso sugere que, embora André Fernandes tenha uma leve vantagem na maioria dos levantamentos, a diferença é mínima e o resultado ainda está dentro da margem de erro, apontando para uma eleição bastante competitiva e com potencial de mudanças rápidas.
+        </p>
+        <p>
+            A média das pesquisas mostra André Fernandes com 50,97% e Evandro Leitão com 49,03%, refletindo a leve vantagem de André. No entanto, essa média ressalta a proximidade dos candidatos, indicando que qualquer mudança no cenário político ou nas campanhas pode ser decisiva nos próximos dias. É um momento de atenção para ambos os lados, que precisarão mobilizar seus eleitores e conquistar os indecisos para garantir a vitória.
+        </p>
+    </div>
+
+    <script>
+        const dataAndre = [51.14, 50, 51, 51.74];
+        const dataEvandro = [48.86, 50, 49, 48.26];
+        const labels = ['Datafolha', 'Quaest', 'Atlas Intel', 'Paraná Pesquisas'];
+
+        // Cálculo das médias
+        const mediaAndre = (dataAndre.reduce((a, b) => a + b, 0) / dataAndre.length).toFixed(2);
+        const mediaEvandro = (dataEvandro.reduce((a, b) => a + b, 0) / dataEvandro.length).toFixed(2);
+
+        // Gráfico principal com os valores das pesquisas
+        const ctx1 = document.getElementById('votingChart').getContext('2d');
+        const votingChart = new Chart(ctx1, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'André Fernandes',
+                        data: dataAndre,
+                        backgroundColor: 'darkblue',
+                        borderColor: 'darkblue',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Evandro Leitão',
+                        data: dataEvandro,
+                        backgroundColor: 'red',
+                        borderColor: 'red',
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top'
+                    },
+                    tooltip: {
+                        enabled: false
+                    },
+                    // Exibir os números nas barras como texto
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value) => value + '%',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        color: 'black'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Porcentagem (%)'
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+
+        // Gráfico separado para a média das pesquisas
+        const ctx2 = document.getElementById('averageChart').getContext('2d');
+        const averageChart = new Chart(ctx2, {
+            type: 'bar',
+            data: {
+                labels: ['Média André Fernandes', 'Média Evandro Leitão'],
+                datasets: [
+                    {
+                        label: 'Média das Pesquisas',
+                        data: [mediaAndre, mediaEvandro],
+                        backgroundColor: ['darkblue', 'red'],
+                        borderColor: ['darkblue', 'red'],
+                        borderWidth: 1
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    datalabels: {
+                        anchor: 'end',
+                        align: 'top',
+                        formatter: (value) => value + '%',
+                        font: {
+                            weight: 'bold',
+                            size: 14
+                        },
+                        color: 'black'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        title: {
+                            display: true,
+                            text: 'Porcentagem (%)'
+                        }
+                    }
+                }
+            },
+            plugins: [ChartDataLabels]
+        });
+    </script>
+</body>
+</html>
